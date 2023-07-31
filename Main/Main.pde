@@ -18,7 +18,7 @@ void draw() {
 
   if (app.canSave()) {
     app.saveView();
-    app.endSaveMode();
+    app.endSaveMode() ;
   }
   
   textAlign(LEFT, BOTTOM);
@@ -30,21 +30,16 @@ void draw() {
 public void controlEvent(ControlEvent event) {
   //println(event.getController().getName());
   switch(event.getController().getName()) {
-    case "saveBtn" : 
-      app.beginSaveMode();
-      break;
-    case "bgHueSlider" :
-    case "bgSatSlider" :
-    case "bgBriSlider" :
-      app.changeBgSlider();
-      break;
-    case "txtHueSlider" :
-    case "txtSatSlider" :
-    case "txtBriSlider" :
-      app.changeTextSlider();
-      break;
-    //default:
-      //break;
+    case "saveBtn" : app.beginSaveMode(); break;
+    case "bgHueSlider" : app.changeBgSlider(); break;
+    case "bgSatSlider" : app.changeBgSlider(); break;
+    case "bgBriSlider" : app.changeBgSlider(); break;
+    case "txtHueSlider" : app.changeTextSlider(); break;
+    case "txtSatSlider" : app.changeTextSlider(); break;
+    case "txtBriSlider" : app.changeTextSlider(); break;
+
+    case "bgColorcodeCopy" : app.clickBgColorcodeCopyBtn(); break;
+    case "textColorcodeCopy" : app.clickTextColorcodeCopyBtn(); break;
   }
   app.clickDefColorBtn(event.getController().getName());
 }
@@ -163,5 +158,12 @@ class App {
    
   public void clickDefColorBtn(String targetName) {
     this.controller.clickDefColorBtn(targetName);
+  }
+
+  public void clickBgColorcodeCopyBtn() {
+    this.controller.clickBgColorcodeCopyBtn();
+  }
+  public void clickTextColorcodeCopyBtn() {
+    this.controller.clickTextColorcodeCopyBtn();
   }
 }

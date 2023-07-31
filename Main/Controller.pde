@@ -1,27 +1,31 @@
 import controlP5.*;
 import java.lang.*;
+import java.awt.datatransfer.*;
+import java.awt.Toolkit;
 
 class Controller {
-    public Slider bgHueSlider;
-    public Slider bgSatSlider;
-    public Slider bgBriSlider;
-    public Slider textHueSlider;
-    public Slider textSatSlider;
-    public Slider textBriSlider;
-    public Button saveBtn;
-    public Textfield volTextFiled;
-    public Textfield bgColorTextFiled;
-    public Textfield textColorTextFiled;
+    private Slider bgHueSlider;
+    private Slider bgSatSlider;
+    private Slider bgBriSlider;
+    private Slider textHueSlider;
+    private Slider textSatSlider;
+    private Slider textBriSlider;
+    private Button saveBtn;
+    private Textfield volTextFiled;
+    private Textfield bgColorTextFiled;
+    private Textfield textColorTextFiled;
+    private Button bgColorHexCopyBtn;
+    private Button textColorHexCopyBtn;
     private int sliderW = 180;
     private int sliderH = 30;
     private int sliderMargin = 10;
     private PFont labelFont;
     private PFont p5Font = createFont("Arial", 5);
     private color[] defaultColorSet = {
-      #EEF8FF, #C9E7FD, #8BBDDA, 
-      #F7D19C, #FFE796, #FFEACC,
-      #54A8A7, #407F54, #6A8CB7,
-      #AE000E, #454545, #F7F7F7
+      #E5F4FF, #BFE4FF, #74CCFF, 
+      #FFCD8D, #FFE796, #FFDDAE,
+      #3A7978, #002E0E, #FFEBD1,
+      #D10011, #303030, #F7F7F7
     };
     private Button[] bgDefaultColorBtnList = new Button[12];
     private Button[] textDefaultColorBtnList = new Button[12];
@@ -88,7 +92,7 @@ class Controller {
                       .setPosition(320, 380 + sliderH + sliderMargin)
                       .setSize(sliderW, sliderH)
                       .setFont(p5Font)
-                      .setMax(200)
+                      .setMax(100)
                       .setMin(0)
                       .setLabel("Saturation")
                       .setColorCaptionLabel(0) 
@@ -139,7 +143,27 @@ class Controller {
                        .setColorCursor(#000000)
                        .setValue("#FFFFFF") 
                        .setAutoClear(false);               
-                      
+
+       bgColorHexCopyBtn = cp5.addButton("bgColorcodeCopy")
+                              .setCaptionLabel("copy")
+                              .setPosition(210, 356)
+                              .setSize(40,20)
+                              .setFont(p5Font)
+                              // .setColor(#ffffff)
+                              .setColorForeground(color(80))
+                              .setColorBackground(color(40))
+                              .setColorActive(color(100));
+
+       textColorHexCopyBtn = cp5.addButton("textColorcodeCopy")
+                              .setCaptionLabel("copy")
+                              .setPosition(510, 356)
+                              .setSize(40,20)
+                              .setFont(p5Font)
+                              // .setColor(#ffffff)
+                              .setColorForeground(color(80))
+                              .setColorBackground(color(40))
+                              .setColorActive(color(100));
+
        saveBtn = cp5.addButton("saveBtn")
                     .setValue(0)
                     .setPosition(440, 560)
@@ -252,10 +276,12 @@ class Controller {
     
     public void setBgSliderValue(color c) {
       colorMode( HSB, 360, 100, 100 ); 
-      //println("setBgSliderValue() => " + hue(c) + ", " + saturation(c) + ", " + brightness(c));
-      this.bgHueSlider.setValue(int(hue(c)));
-      this.bgSatSlider.setValue(int(saturation(c)));
-      this.bgBriSlider.setValue(int(brightness(c)));
+      float hue = hue(c);
+      float sat = saturation(c);
+      float bri = brightness(c);
+      this.bgHueSlider.setValue(hue);
+      this.bgSatSlider.setValue(sat);
+      this.bgBriSlider.setValue(bri);
     }
     
     public color getTextSliderValue() {
@@ -268,17 +294,20 @@ class Controller {
     
     public void setTextSliderValue(color c) {
       //println("setTextSliderValue()");
-      colorMode( HSB, 360, 100, 100 );  
-      this.textHueSlider.setValue(int(hue(c)));
-      this.textSatSlider.setValue(int(saturation(c)));
-      this.textBriSlider.setValue(int(brightness(c)));
+      colorMode( HSB, 360, 100, 100 ); 
+      float hue = hue(c);
+      float sat = saturation(c);
+      float bri = brightness(c);
+      this.textHueSlider.setValue(hue);
+      this.textSatSlider.setValue(sat);
+      this.textBriSlider.setValue(bri);
     }
     
     
     public color getBgFieldValue() throws Exception {
       //println("getBgFieldValue()");
       String hex = this.bgColorTextFiled.getText();
-      println(hex);
+      // println(hex);
       if (hex.length() == 7) {      
         color c = hex2color(hex);
         return color(c);
@@ -308,21 +337,23 @@ class Controller {
     }
     
     public void clickDefColorBtn(String targetName) {
-      println(targetName);
+      // println(targetName);
       boolean isFind = false;
-      for(int i = 0; i < this.bgDefaultColorBtnNameList.length; i++) {
+      for (int i = 0; i < this.bgDefaultColorBtnNameList.length; i++) {
         
-        if(targetName.equals(this.bgDefaultColorBtnNameList[i])) {
-          println("  :" + this.bgDefaultColorBtnNameList[i]);
+        if (targetName.equals(this.bgDefaultColorBtnNameList[i])) {
+          // println("  :" + this.bgDefaultColorBtnNameList[i]);
+          // println(color2hex(defaultColorSet[i]));
           this.setBgSliderValue(defaultColorSet[i]);
           this.setBgFieldValue(defaultColorSet[i]);
           isFind = true;
           break;
         }
       }
-      if(!isFind) {
-        for(int i = 0; i < this.textDefaultColorBtnNameList.length; i++) {
-          if(targetName.equals(this.textDefaultColorBtnNameList[i])) {
+      if (!isFind) {
+        for (int i = 0; i < this.textDefaultColorBtnNameList.length; i++) {
+          if (targetName.equals(this.textDefaultColorBtnNameList[i])) {
+            // println(color2hex(defaultColorSet[i]));
             this.setTextSliderValue(defaultColorSet[i]);
             this.setTextFieldValue(defaultColorSet[i]);
             isFind = true;
@@ -331,6 +362,14 @@ class Controller {
         }
       }
     }
+
+    public void clickBgColorcodeCopyBtn() {
+      this.setClipboard(this.bgColorTextFiled.getText());
+    }
+    public void clickTextColorcodeCopyBtn() {
+      this.setClipboard(this.textColorTextFiled.getText());
+    }
+    
     
     private color hex2color(String hex) {
       //hex.replace("#", "");
@@ -361,5 +400,12 @@ class Controller {
     
     public int getVol() {
       return int(this.volTextFiled.getText());
+    }
+
+    private void setClipboard(String str) {
+      // println(str);
+      Clipboard Clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      StringSelection StringSelection = new StringSelection(str);
+      Clipboard.setContents(StringSelection, StringSelection);
     }
 }
