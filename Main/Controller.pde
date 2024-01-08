@@ -20,7 +20,7 @@ class Controller {
     private int sliderH = 30;
     private int sliderMargin = 10;
     private PFont labelFont;
-    private PFont p5Font = createFont("Arial", 5);
+    private PFont p5Font = createFont("Arial", 10 / displayDensity());
     private color[] defaultColorSet = {
       #E5F4FF, #BFE4FF, #74CCFF, 
       #FFCD8D, #FFE796, #FFDDAE,

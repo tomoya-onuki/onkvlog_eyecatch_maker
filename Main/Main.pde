@@ -23,7 +23,7 @@ void draw() {
   
   textAlign(LEFT, BOTTOM);
   fill(#000000);
-  textFont(createFont("Arial", 10));     
+  textFont(createFont("Arial", 20));     
   text("(C) 2023 onkVLog.", 20, 580); 
 }
 

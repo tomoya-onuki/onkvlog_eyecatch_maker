@@ -47,7 +47,9 @@ class Viewer {
     }
     
     public String getSaveFileName() {
-      return "./onkVLog_Eyecatch_Maker_out/eyecatch_vol" 
+      String[] token = sketchPath().split("/");
+      //println(token);
+      return token[0] + "/" + token[1] + "/onkVLog_Eyecatch_Maker/" 
       + volNum   
       + backgroundColor
       + textColor
